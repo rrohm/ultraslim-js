@@ -111,7 +111,7 @@ describe('ae-ultraslim æ.view content viewer', function () {
 //      var t = '<div ae-repeat="data">would repeated with model {{id}} </div>';
 //      expect(view.render(t, {}) instanceof NodeList).toBe(true);
 //    });
-    it('returns a object if ae- is used (and a model is given)', function () {
+    it('returns an object if ae- is used (and a model is given)', function () {
       var tIn = '<div ae-repeat="data">would repeated with model {{id}} </div>';
       var tOut = '<div ae-repeat="data">would repeated with model  </div>';
       expect(typeof view.render(tIn, {})).toBe('object');
@@ -150,8 +150,8 @@ describe('ae-ultraslim æ.view content viewer', function () {
       for (var i = 0; i < list.length; i++) {
         result += list[i].outerHTML;
       }
-
-      expect(result).toEqual('<div class="ok">would repeated with model 123 </div><div class="ok">would repeated with model 456 </div>');
+      // new: repeated nodes get a new attribute assigned as marker for better removel (ae-repeated="true")
+      expect(result).toEqual('<div class="ok" ae-repeated="true">would repeated with model 123 </div><div class="ok" ae-repeated="true">would repeated with model 456 </div>');
     });
 
     xit('applies model properties as values to {{...}} placeholders', function () {

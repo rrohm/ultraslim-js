@@ -694,7 +694,7 @@
               data = modelObject[attr.value];
             }
             
-            if (modelObject) {
+            if (data) {
               var newNodes = [];
 
               if (data.length > 0) {
@@ -702,6 +702,7 @@
                   var d = data[k];
                   var n = node.cloneNode(true);
                   n.attributes.removeNamedItem(attrPrefix + 'repeat');
+                  n.setAttribute(attrPrefix + 'repeated', true);
                   view.process(n, d);
                   newNodes.push(n);
                 }
@@ -717,13 +718,23 @@
                   console.log('model.onChange', node, sender, oldValue, newData);
                   var newNodes = [];
 
-                  parent.innerHTML = '';
+                  var i = 0;
+                  while (i < parent.childNodes.length) {
+                    if (parent.childNodes[i].attributes && parent.childNodes[i].attributes.getNamedItem(attrPrefix + 'repeated')) {
+                      parent.removeChild(parent.childNodes[i]);
+                    } else {
+                      i++;
+                    }
+                  }
                   if (newData.length > 0) {
                     for (var k = 0; k < newData.length; k++) {
                       var d = newData[k];
                       var n = node.cloneNode(true);
                       n.attributes.removeNamedItem(attrPrefix + 'repeat');
+                      n.setAttribute(attrPrefix + 'repeated', true);
                       view.process(n, d);
+                      // TODO: Better insert the repeated children at the original position of the template node, 
+                      // not just append them at the end!
                       parent.appendChild(n);
                     }
                   }
