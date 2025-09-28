@@ -14,7 +14,10 @@
   <li ae-repeat="data" id="data_{{id}}">{{name}} ({{address.street}})</li>
 </ul>
 
+<p>The ae-repeat directive also supports binding to nested model properties, e.g.: </p>
 
+<pre><code>&lt;li ae-repeat="modelProperty.data" ae-click="this.controller.handle({{id}})" id="data_{{id}}"&gt;{{name}}&lt;/li&gt;
+</code></pre>
 
 <p>The ultraslim library support these events: </p>
 <ul>

@@ -40,6 +40,11 @@ THE SOFTWARE.
         let firstController = {
           model: {
             message: 'This is a message from the model'
+          },
+          init: function(){
+            document.getElementById('bt-template-input').onclick = function(event) {
+              firstController.model.message = document.getElementById('template-input').value;
+            };
           }
         };
         v.show('views/templates.html', firstController);
@@ -72,7 +77,13 @@ THE SOFTWARE.
             name: "Lyse",
             firstname: "Anna",
             likeCats: true
-          }
+          },
+          likesCats: [
+            {value: 1, label:"Yes, absolutly!"},
+            {value: 2, label:"Yes, but not in my house"},
+            {value: 3, label:"Don't know"},
+            {value: 4, label:"No, I prefer dogs."}
+          ]
         },
         onButtonClick: function (e) {
           console.log(e);

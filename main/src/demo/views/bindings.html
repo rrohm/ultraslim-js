@@ -30,6 +30,9 @@
     <label for="input2">
       Input 3: Likes Cats?
       <input id="input3" name="input3" type="checkbox" ae-bind="this.controller.model.likeCats" />
+      <select>
+        <option ae-repeat="likesCats" value="{{value}}">{{label}}</option>
+      </select>
     </label>
     <br/>
     <label for="button1">

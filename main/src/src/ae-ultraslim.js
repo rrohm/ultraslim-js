@@ -361,6 +361,8 @@
           // ATTENTION! JS array are objects, too! So we need to exclude them explicitly!
           console.log('set.object ', value);
           me.object(value);
+        } else {
+          console.log("set else !!!!!!!!!!!!!!!!!", typeof value);
         }
 
         var oldValue = data[prop];
@@ -589,10 +591,11 @@
    * @returns {undefined}
    */
   View.prototype.show = function (fragmentURL, controller) {
+    console.log("View.prototype.show()", fragmentURL, controller, typeof controller);
     this.controller = controller;
 
     if (controller && controller.model && typeof controller.model === 'object') {
-      console.log('show with controller ', controller, controller.model);
+      console.log('View.prototype.show with controller ', controller, controller.model);
       me.object(controller.model);
     }
     me.templates.load((controller) ? {url: fragmentURL, controller: controller} : fragmentURL);
@@ -614,14 +617,14 @@
       t = this.render(t, model, controller);
     }
     if (t instanceof NodeList) {
-      console.log('View.prototype.onLoad 1');
+      console.log('View.prototype.onLoad rendered NodeList');
 
       this.getEl().innerHTML = '';
       for (var i = 0; i < t.length; i++) {
         this.getEl().appendChild(t.item(i));
       }
     } else {
-      console.log('View.prototype.onLoad 2', typeof t);
+      console.log('View.prototype.onLoad rendered', typeof t);
       this.getEl().innerHTML = t;
       this.process(this.getEl(), model, controller);
     }
@@ -672,9 +675,26 @@
 
           // ae-repeat
           if (attr.name === attrPrefix + 'repeat') {
-            // model has data? render ...
-            if (model[attr.value]) {
-              var data = model[attr.value];
+            console.log("View.prototype.doProcess repeat", attr.value);
+            
+            var modelObject = model;
+            var data = undefined;
+            if (attr.value.indexOf('.') > -1) {
+              var modelObjectPath = attr.value.split('.');
+              console.log("View.prototype.doProcess repeat modelObjectPath", modelObjectPath);
+              for (var mopI = 0; mopI < modelObjectPath.length -1; mopI++) {
+                var modelObjectPathSegment = modelObjectPath[mopI];
+                console.log("View.prototype.doProcess repeat modelObjectPath[i]", modelObjectPathSegment);
+                modelObject = modelObject[modelObjectPathSegment];
+              }
+              if (modelObject) {
+                data = modelObject[modelObjectPath[modelObjectPath.length -1]];
+              }
+            } else {
+              data = modelObject[attr.value];
+            }
+            
+            if (modelObject) {
               var newNodes = [];
 
               if (data.length > 0) {
@@ -688,12 +708,12 @@
                 for (var l = 0; l < newNodes.length; l++) {
                   node.parentNode.insertBefore(newNodes[l], node);
                 }
-              }
+              } 
 
               // attach model listener
               /*jshint loopfunc: true */
-              if (model.addChangeListener) {
-                model.addChangeListener(attr.value, function (sender, oldValue, newData) {
+              if (modelObject.addChangeListener) {
+                modelObject.addChangeListener(attr.value, function (sender, oldValue, newData) {
                   console.log('model.onChange', node, sender, oldValue, newData);
                   var newNodes = [];
 
@@ -709,6 +729,8 @@
                   }
                 });
               }
+            } else {
+              console.error("View.prototype.doProcess repeat: Model has no value named '"+ attr.value + "'", model);
             }
 
             // remove original "template" node
@@ -793,7 +815,13 @@
             // ae-model
           } else if (attr.name === attrPrefix + 'model') {
             console.log(attrPrefix + 'model', attr.value);
-            node.textContent = new Function("return " + attr.value).call(view);
+            var textContent = "";
+            try {
+              textContent = new Function("return " + attr.value).call(view);
+            } catch (e) {
+              console.log(attrPrefix + 'model', attr.value, e);
+            }
+            node.textContent = textContent;
             view.createTextBinding(attr.value, node);
           }
         }

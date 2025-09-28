@@ -1,1 +1,22 @@
 <h2>Routing</h2>
+
+<p>Routing is defined via the <code>æ.router</code> class. You create an instance of it and set the URLs and the routings
+for these URLs, i.e., how the web application should handle the URL.</p>
+
+<pre>
+  var router = æ.router();
+  var v = æ.view('#view');
+
+  router.on('/', function () {
+    v.show('views/fragment0.html');
+  });
+</pre>
+
+<h3>Route Parameters</h3>
+
+<p>Parameters get prefixed with a colon, e.g., <code>:id</code> for a parameter that should be named <code>id</code>.</p>
+<pre>
+  router.on('/myobjects/:id', function () {
+    v.show('views/fragment0.html');
+  });
+</pre>
