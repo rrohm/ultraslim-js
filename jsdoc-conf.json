@@ -1,0 +1,11 @@
+{
+  "source": {
+    "include": ["./src/src/"],
+    "includePattern": ".+\\.(m?js(doc|x)?)$"
+  },
+  "opts": {
+    "destination": "./apidocs",
+    "encoding": "utf8",
+    "tutorials": "./src/tutorials/"
+  }
+}

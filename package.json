@@ -1,0 +1,29 @@
+{
+  "name": "aeUltraSlim",
+  "version": "2.0.0",
+  "keywords": [
+    "util",
+    "functional",
+    "server",
+    "client",
+    "browser"
+  ],
+  "type": "module",
+  "scripts": {
+    "docs": "jsdoc --configure jsdoc-conf.json",
+    "test": "jasmine-browser-runner runSpecs",
+    "minify": "terser -c drop_console -c passes=10 -o src/dist/ae-ultraslim.min.js  -m --  src/src/ae-ultraslim.mjs",
+    "build": "npm run test && npm run minify && npm run docs"
+  },
+  "author": "Robert Rohm&lt;r.rohm@aeonium-systems.de&gt;",
+  "contributors": [],
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.12",
+    "jasmine": "^7.0.0",
+    "jasmine-ajax": "^4.0.0",
+    "jasmine-browser-runner": "^5.0.0",
+    "jsdoc": "^4.0.5",
+    "jshint": "^2.13.6",
+    "terser": "^5.51.2"
+  }
+}
