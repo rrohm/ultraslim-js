@@ -45,6 +45,9 @@ THE SOFTWARE.
             document.getElementById('bt-template-input').onclick = function(event) {
               firstController.model.message = document.getElementById('template-input').value;
             };
+          },
+          exit: function() {
+            console.log("exit() gets called when user leaves this view.");
           }
         };
         v.show('views/templates.html', firstController);
@@ -106,7 +109,10 @@ THE SOFTWARE.
         var dataController = {
           model: {
             persons: [],
-            selectedId: undefined
+            selectedId: undefined,
+            nested: {
+              persons: []
+            }
           },
           init: function () {
             console.log('/data model.init()');
@@ -135,7 +141,10 @@ THE SOFTWARE.
           handle: function (id) {
             this.model.selectedId = id;
             alert('Selected ID# ' + this.model.selectedId);
-          }
+          },
+          nestedPersonAdd: function () {
+            this.model.nested.persons.push({id: 104, lastname: 'Wurst', firstname: 'Hans', address: 'At Home'});
+          },
         };
         v.show('views/data.html', dataController);
       });

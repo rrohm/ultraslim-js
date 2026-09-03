@@ -21,3 +21,12 @@
 <p>Replace: </p>
 <button ae-click="this.controller.personReplace()" ae-enabled="model.selectedId">replace</button>
 
+
+<h3>Data binding on nested model properties – TBD – currently not working</h3>
+<p>List of data elements: </p>
+<ul>
+  <li ae-repeat="nested.persons" ae-click="this.controller.handle({{id}})" id="data_{{id}}">
+    {{id}} {{lastname}},{{firstname}} {{address.street}} {{foo}}</li>
+</ul>
+<p>Add: </p>
+<button ae-click="this.controller.nestedPersonAdd()" >add</button>

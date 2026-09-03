@@ -1,6 +1,6 @@
 {
   "name": "aeUltraSlim",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "keywords": [
     "util",
     "functional",
@@ -24,7 +24,7 @@
     "grunt-karma": "^4.0.2",
     "grunt-mocha-test": "^0.13.3",
     "jasmine-ajax": "^4.0.0",
-    "jsdoc": "^4.0.2",
+    "jsdoc": "^4.0.5",
     "karma": "^6.4.1",
     "karma-chrome-launcher": "^3.1.0",
     "karma-coverage": "^2.0.2",

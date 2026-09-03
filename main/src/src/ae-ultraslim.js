@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright 2024 Robert Rohm r.rohm@aeonium-systems.de.
+ * Copyright 2026 Robert Rohm r.rohm@aeonium-systems.de.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -415,7 +415,7 @@
       if (Array.isArray(o[prop])) {
         this.object(o[prop]);
         o[prop].push = function (e) {
-          console.log("PUSH", o[prop], e);
+          console.log("PUSH", prop, o[prop], e);
           Array.prototype.push.call(o[prop], e);
           if (listeners[prop]) {
             me.object(e);
@@ -592,6 +592,10 @@
    */
   View.prototype.show = function (fragmentURL, controller) {
     console.log("View.prototype.show()", fragmentURL, controller, typeof controller);
+    // old controller and unload required?
+    if (this.controller && typeof this.controller.exit === 'function') {
+      this.controller.exit(this.getEl());
+    }
     this.controller = controller;
 
     if (controller && controller.model && typeof controller.model === 'object') {
@@ -749,14 +753,18 @@
 
             // ae-click
           } else if (attr.name === attrPrefix + 'click') {
-            console.log(attrPrefix + 'click', attr.value);
             node.onclick = view.createHandler(node, 'click', attr.value);
 
             // ae-dblclick
           } else if (attr.name === attrPrefix + 'dblclick') {
-            console.log(attrPrefix + 'dblclick', attr.value);
             node.ondblclick = view.createHandler(node, 'dblclick', attr.value);
 
+          } else if (attr.name === attrPrefix + 'mousedown') {
+            node.onmousedown = view.createHandler(node, 'mousedown', attr.value);
+
+          } else if (attr.name === attrPrefix + 'mouseup') {
+            node.onmouseup = view.createHandler(node, 'mouseup', attr.value);
+            
             // ae-enabled
           } else if (attr.name === attrPrefix + 'enabled') {
             
@@ -881,20 +889,20 @@
     var regex = new RegExp('[(].*[)]');
     if (code.toLowerCase().startsWith('this.controller.') && !regex.test(code)) {
       return function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var f = eval(code);
+//        e.preventDefault();
+//        e.stopPropagation();
+        var f = eval(code.replace('this.controller', 'me.controller'));
         f.call(me.controller, e);
       };
     } else {
       return function (e) {
         console.log('View.prototype.createHandler function', me, node, event);
         if (event === 'click' || event === 'dblclick') {
-          e.preventDefault();
-          e.stopPropagation();
+//          e.preventDefault();
+//          e.stopPropagation();
         }
         var f = new Function(code);
-        f.call(me);
+        f.call(me, e);
       };
     }
   };
